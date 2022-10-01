@@ -3,8 +3,8 @@
 Field::Field(const int size_)
 {
 	m_size = size_;
-	for (size_t y = 0; y < size_; ++y)
-		for (size_t x = 0; x < size_; ++x)
+	for (std::int32_t y = 0; y < size_; ++y)
+		for (std::int32_t x = 0; x < size_; ++x)
 			m_listOfPoint.push_back(Point(x, y,(x == 0 || x==size_-1 || y == size_-1 || y==0), Point::State::NOT_VISITED, Point::Type::FREE));
 	for (Point& point : m_listOfPoint)
 		for (Point& otherPoint : m_listOfPoint)
@@ -38,6 +38,7 @@ std::pair<D2D1::ColorF, std::pair<int, int>> Field::getColorAndLocation(const fl
 		if (abs(pixelX_ - point.getPixelLocation().first) < 9)
 			if (abs(pixelY_ - point.getPixelLocation().second) < 9)
 				return std::make_pair(point.getColor(), point.getPixelLocation());
+	return { D2D1::ColorF{0,0,0},{-1,-1} };
 }
 
 int Field::getSize() const

@@ -33,7 +33,7 @@ void FourBeamAlgorithm::findPath(std::vector<Point>& pointList)
 	setPath(currPoint, setDir(crossPoint, currPoint));
 }
 
-FourBeamAlgorithm::Direction FourBeamAlgorithm::setDir(const Point const* from,const Point const* to)
+FourBeamAlgorithm::Direction FourBeamAlgorithm::setDir(const Point* const from, const Point* const to)
 {
 	int dX = from->getLocation().first - to->getLocation().first;
 	int dY = from->getLocation().second - to->getLocation().second;

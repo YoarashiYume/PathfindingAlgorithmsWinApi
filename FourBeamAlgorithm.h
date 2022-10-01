@@ -24,7 +24,7 @@ private:
 	\param from,to points to find directions
 	\return Direction
 	*/
-	Direction setDir(const Point const* from, const Point const* to);
+	Direction setDir(const Point * const from, const Point* const to);
 	/**
 	\brief runs from the start point to the end point, setting intermediate points as waypoints
 	\param currPoint start point

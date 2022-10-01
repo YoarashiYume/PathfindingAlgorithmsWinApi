@@ -49,11 +49,9 @@ private:
 		D2D1::ColorF(0.666f,0.f,0.f),
 		D2D1::ColorF(0.0627f,0.615f,0.768f),
 		D2D1::ColorF(0.f,0.784f,1.f),
-		//D2D1::ColorF(0.596,0.741,0.074),
 		D2D1::ColorF(0.96f,1.f,0.f),
 		D2D1::ColorF::DarkGray,
 		D2D1::ColorF(0.654f,0.768f,0.98f)
-		//D2D1::ColorF(0.41,0,1)
 	};///< point color array
 
 	/*for beam Algorithm*/
@@ -63,7 +61,7 @@ private:
 	bool m_isBorder = false;///< is a boundary point
 	
 	/*for Lee Algorithm*/
-	int cost = -1;///< Number of moves from the starting cellpointto the current one
+	int cost = -1;///< Number of moves from the starting point the current one
 	
 	/*for A-star*/
 	int costG = INT_MAX;///< Number of moves from the starting point to the current one

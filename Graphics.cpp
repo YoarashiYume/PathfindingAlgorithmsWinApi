@@ -10,10 +10,10 @@ Graphics::Graphics(HWND* hwnd_, ID2D1Factory* pD2D1Factory, ID2D1HwndRenderTarge
 {
 	m_pD2D1Factory = pD2D1Factory;
 	m_pRT = pRT;
-	dpiX = dpiX_;
-	dpiY = dpiY_;
-	offsetXinDPI = pixelToDPIX(230);
-	offsetYinDPI = pixelToDPIY(0);
+	dpiX = static_cast<float>(dpiX_);
+	dpiY = static_cast<float>(dpiY_);
+	offsetXinDPI = pixelToDPIX(230.f);
+	offsetYinDPI = pixelToDPIY(0.f);
 	m_pHwnd = hwnd_;
 	m_pRT->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF::DarkGray),
@@ -30,10 +30,10 @@ void Graphics::changeField(Field& f,const int dpiX_,const int dpiY_)
 			&m_pBrush);
 		BeginPaint(*m_pHwnd, &pt);
 		m_pRT->BeginDraw();
-		int x = colorAndLocation.second.first - 8;
-		int dx = x + 16;
-		int y = colorAndLocation.second.second - 8;
-		int dy = y + 16;
+		float x = static_cast<float>(colorAndLocation.second.first - 8);
+		float dx = static_cast<float>(x + 16);
+		float y = static_cast<float>(colorAndLocation.second.second - 8);
+		float dy = static_cast<float>(y + 16);
 		m_pRT->FillRectangle(
 			D2D1::RectF(
 				pixelToDPIX(x) + offsetXinDPI,
@@ -55,8 +55,8 @@ void Graphics::printFullField(Field& f)
 		D2D1::RectF(
 			0 + offsetXinDPI,
 			0 + offsetYinDPI,
-			pixelToDPIX(f.getSize() * 17) + offsetXinDPI,
-			pixelToDPIY(f.getSize() * 17) + offsetYinDPI),
+			pixelToDPIX(static_cast<float>(f.getSize() * 17)) + offsetXinDPI,
+			pixelToDPIY(static_cast<float>(f.getSize() * 17)) + offsetYinDPI),
 		m_pBrush
 	);
 	m_pRT->EndDraw();
@@ -71,12 +71,13 @@ void Graphics::repaintField(Field& f)
 	{
 		if (el.getType() == Point::Type::FINISH || el.getType() == Point::Type::START)
 			continue;
-		auto colorAndLocation = f.getColorAndLocation(el.getPixelLocation().first, el.getPixelLocation().second);
+		auto colorAndLocation = f.getColorAndLocation(static_cast<float>(el.getPixelLocation().first),
+			static_cast<float>(el.getPixelLocation().second));
 		m_pBrush->SetColor(colorAndLocation.first);
-		int x = colorAndLocation.second.first - 8;
-		int dx = x + 16;
-		int y = colorAndLocation.second.second - 8;
-		int dy = y + 16;
+		float x = static_cast<float>(colorAndLocation.second.first - 8);
+		float dx = static_cast<float>(x + 16);
+		float y = static_cast<float>(colorAndLocation.second.second - 8);
+		float dy = static_cast<float>(y + 16);
 		m_pRT->FillRectangle(
 			D2D1::RectF(
 				pixelToDPIX(x) + offsetXinDPI,
