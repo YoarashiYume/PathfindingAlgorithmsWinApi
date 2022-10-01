@@ -5,12 +5,12 @@ void Point::setVisited()
 	m_State = Point::State::VISITED;
 }
 
-Point::Type Point::getType()
+Point::Type Point::getType() const
 {
 	return m_Type;
 }
 
-void Point::setType(Type newType_)
+void Point::setType(const Type newType_)
 {
 	switch (newType_)
 	{
@@ -54,30 +54,30 @@ void Point::setType(Type newType_)
 	
 }
 
-Point::State Point::getState()
+Point::State Point::getState() const
 {
 	return m_State;
 }
 
-void Point::setState(State state_)
+void Point::setState(const State state_)
 {
 	m_State = state_;
 }
 
-D2D1::ColorF Point::getColor()
+D2D1::ColorF Point::getColor() const
 {
 	if (m_State == Point::State::NOT_VISITED)
 		return m_color.at(static_cast<int> (m_Type));
 	else
-		return m_color.at(static_cast<int> (m_State) + cCountofType);
+		return m_color.at(static_cast<int> (m_State) + COUNT_OF_POINT_TYPE);
 }
 
-std::pair<int, int> Point::getLocation()
+std::pair<int, int> Point::getLocation() const
 {
 	return m_location;
 }
 
-std::pair<int, int> Point::getPixelLocation()
+std::pair<int, int> Point::getPixelLocation() const
 {
 	return m_pixelCenter;
 }
@@ -96,63 +96,64 @@ std::vector<std::reference_wrapper<Point>>& Point::getNeighbors()
 	return neighbors;
 }
 
-Point::Point(int x_, int y_,bool isBorder_, State state_, Type type_)
+Point::Point(const int x_,const int y_,const bool isBorder_,const State state_,const Type type_)
 {
+	constexpr PIXEL_HALF_SIZE = 8;
 	m_location = std::make_pair(x_, y_);
-	m_pixelCenter = std::make_pair(17 * x_ + 8, 17 * y_ + 8);
+	m_pixelCenter = std::make_pair((2*PIXEL_HALF_SIZE+1) * x_ + PIXEL_HALF_SIZE, (2*PIXEL_HALF_SIZE+1) * y_ + PIXEL_HALF_SIZE);
 	m_State = state_;
 	m_Type = type_;
 	m_isBorder = isBorder_;
 }
-int Point::getCost()
+int Point::getCost() const
 {
 	return cost;
 }
-void Point::setCost(int cost_)
+void Point::setCost(const int cost_)
 {
 	cost = cost_;
 }
-std::pair<bool, bool> Point::checkStateBeam()
+std::pair<bool, bool> Point::checkStateBeam() const
 {
 	return std::make_pair(isFromA,isFromB);
 }
-void Point::setIsFromA(bool newState_)
+void Point::setIsFromA(const bool newState_) const
 {
 	isFromA = newState_;
 }
-void Point::setIsFromB(bool newState_)
+void Point::setIsFromB(const bool newState_)
 {
 	isFromB = newState_;
 }
-bool Point::isBorder()
+bool Point::isBorder() const
 {
 	return m_isBorder;
 }
-double Point::getCostF()
+double Point::getCostF() const
 {
 	return costF;
 }
-void Point::setCostF(double costF_)
+void Point::setCostF(const double costF_)
 {
 	costF = costF_;
 }
-int Point::getCostG()
+int Point::getCostG() const
 {
 	return costG;
 }
-void Point::setCostG(int costG_)
+void Point::setCostG(const int costG_)
 {
 	costG = costG_;
 }
-void Point::setPrevious(Point* previous_)
+void Point::setPrevious(Point* previous_) 
 {
 	previous = previous_;
 }
-Point* Point::getPrevious()
+Point* Point::getPrevious() const
 {
 	return previous;
 }
-bool Point::isStartAndFinish()
+bool Point::isStartAndFinish() const
 {
 	return countOfFinish!=0 && countOfStart!=0;
 }

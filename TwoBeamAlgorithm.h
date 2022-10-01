@@ -1,6 +1,7 @@
 #ifndef TWOBEAMALGORITHM_H_
 #define TWOBEAMALGORITHM_H_
 #include "Algorithm.h"
+#include <functional>
 class TwoBeamAlgorithm : public Algorithm
 {
 

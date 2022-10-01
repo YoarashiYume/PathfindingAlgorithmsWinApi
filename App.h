@@ -10,7 +10,6 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #include "Field.h"
 #include "Graphics.h"
 #include "algorithms.h"
-#include "PathBuilder.h"
 #include <exception>
 #include <stdexcept>
 #include <algorithm>
@@ -62,7 +61,6 @@ private:
 	std::string text = "";
 	Field* f = nullptr;
 	Graphics* disp = nullptr;
-	PathBuilder pB;
 	Algorithm* al = nullptr;
 	int m_ButtonSize = 220;
 };

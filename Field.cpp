@@ -1,6 +1,6 @@
 #include "Field.h"
 
-Field::Field(int size_)
+Field::Field(const int size_)
 {
 	m_size = size_;
 	for (size_t y = 0; y < size_; ++y)
@@ -17,7 +17,7 @@ void Field::refreshField()
 		point.setState(Point::State::NOT_VISITED);
 }
 
-std::pair<D2D1::ColorF,std::pair<int,int>> Field::repaintField(float pixelX_, float pixelY_)
+std::pair<D2D1::ColorF,std::pair<int,int>> Field::repaintField(const float pixelX_,const float pixelY_)
 {
 	for (Point& point : m_listOfPoint)
 		if (abs(pixelX_ - point.getPixelLocation().first)<9)
@@ -32,7 +32,7 @@ std::pair<D2D1::ColorF,std::pair<int,int>> Field::repaintField(float pixelX_, fl
 	return std::make_pair(-1, std::make_pair(-1,-1));
 }
 
-std::pair<D2D1::ColorF, std::pair<int, int>> Field::getColorAndLocation(float pixelX_, float pixelY_)
+std::pair<D2D1::ColorF, std::pair<int, int>> Field::getColorAndLocation(const float pixelX_,const float pixelY_) const
 {
 	for (Point& point : m_listOfPoint)
 		if (abs(pixelX_ - point.getPixelLocation().first) < 9)
@@ -40,7 +40,7 @@ std::pair<D2D1::ColorF, std::pair<int, int>> Field::getColorAndLocation(float pi
 				return std::make_pair(point.getColor(), point.getPixelLocation());
 }
 
-int Field::getSize()
+int Field::getSize() const
 {
 	return m_size;
 }
@@ -67,7 +67,7 @@ std::vector<Point>& Field::getList()
 	return m_listOfPoint;
 }
 
-bool Field::canBuild()
+bool Field::canBuild() const
 {
 	return Point::isStartAndFinish();
 }

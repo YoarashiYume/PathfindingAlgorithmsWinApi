@@ -6,7 +6,7 @@ Graphics::~Graphics()
 	m_pBrush = nullptr;
 }
 
-Graphics::Graphics(HWND* hwnd_, ID2D1Factory* pD2D1Factory,ID2D1HwndRenderTarget* pRT, int dpiX_, int dpiY_)
+Graphics::Graphics(HWND* hwnd_, ID2D1Factory* pD2D1Factory, ID2D1HwndRenderTarget* pRT,const int dpiX_,const int dpiY_)
 {
 	m_pD2D1Factory = pD2D1Factory;
 	m_pRT = pRT;
@@ -20,7 +20,7 @@ Graphics::Graphics(HWND* hwnd_, ID2D1Factory* pD2D1Factory,ID2D1HwndRenderTarget
 		&m_pBrush);
 }
 
-void Graphics::changeField(Field& f,int dpiX_,int dpiY_)
+void Graphics::changeField(Field& f,const int dpiX_,const int dpiY_)
 {
 	auto colorAndLocation = f.repaintField(dpiToPixelX(dpiX_ - offsetXinDPI), dpiToPixelY(dpiY_ - offsetYinDPI) );
 	if (colorAndLocation.second.first != -1)
@@ -94,22 +94,22 @@ void Graphics::clear(Field& f)
 	f.clear();
 	printFullField(f);
 }
-
-float Graphics::pixelToDPIX(float x)
+ 
+float Graphics::pixelToDPIX(const float x) const
 {
 	return x * 96 / dpiX;
 }
 
-float Graphics::pixelToDPIY(float y)
+float Graphics::pixelToDPIY(const float y) const
 {
 	return y * 96 / dpiY;
 }
 
-float Graphics::dpiToPixelX(float x_)
+float Graphics::dpiToPixelX(const float x_) const
 {
 	return x_ * dpiX / 96;
 }
-float Graphics::dpiToPixelY(float y_)
+float Graphics::dpiToPixelY(const float y_) const
 {
 	return y_ * dpiY / 96;
 }

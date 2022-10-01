@@ -309,9 +309,13 @@ LRESULT App::window_proc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			isCleared = true;
 			break;
 		case App::CTL_ID::StartButton_ID:
-			if (!isCleared || !f)
+			if (!isCleared || !f || !al)
 				break;
-			pB.buildPatch(al, *f);
+			if (!f->canBuild())
+				break;
+			if (!al->buildPath(f->getList()))
+				break;
+			al->findPath(f->getList());
 			disp->repaintField(*f);
 			isCleared = false;
 			break;
