@@ -34,7 +34,7 @@ std::pair<D2D1::ColorF,std::pair<int,int>> Field::repaintField(const float pixel
 
 std::pair<D2D1::ColorF, std::pair<int, int>> Field::getColorAndLocation(const float pixelX_,const float pixelY_) const
 {
-	for (Point& point : m_listOfPoint)
+	for (const Point& point : m_listOfPoint)
 		if (abs(pixelX_ - point.getPixelLocation().first) < 9)
 			if (abs(pixelY_ - point.getPixelLocation().second) < 9)
 				return std::make_pair(point.getColor(), point.getPixelLocation());

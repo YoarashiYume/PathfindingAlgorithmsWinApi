@@ -6,10 +6,10 @@ class Astar : public Algorithm
 private:
 	double hFunction(Point& current, Point& finishCell);
 	Point* minimymF(std::vector<Point*> list);
-	bool isPathFind;
+	bool isPathFind{false};
 public:
-	bool buildPath(std::vector<Point>& const pointList) override;
-	void findPath(std::vector<Point>& const pointList) override;
+	bool buildPath(std::vector<Point>& pointList) override;
+	void findPath(std::vector<Point>& pointList) override;
 };
 
 #endif // !ASTAR_H

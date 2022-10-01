@@ -2,9 +2,10 @@
 
 
 
-bool WaveAlgorithm::buildPath(std::vector<Point>& const pointList)
+bool WaveAlgorithm::buildPath(std::vector<Point>& pointList)
 {
 	std::vector<std::reference_wrapper<Point>> currentList;
+	//search for start element
 	auto it = std::find_if(pointList.begin(), pointList.end(), [](Point & el) {
 		return el.getType() == Point::Type::START;
 		});
@@ -12,6 +13,7 @@ bool WaveAlgorithm::buildPath(std::vector<Point>& const pointList)
 	currentList.front().get().setCost(0);
 	while (!currentList.empty())
 	{
+		//search for orthogonal neighbors
 		for (auto& el : currentList.front().get().getNeighbors())
 		{
 			if (el.get().getCost() == -1 && el.get().getType()!=Point::Type::BLOCK)
@@ -23,7 +25,9 @@ bool WaveAlgorithm::buildPath(std::vector<Point>& const pointList)
 						return true;
 				}
 		}
+		//change scanned cell
 		currentList.front().get().setState(Point::State::VISITED);
+		//removing visited points from the list
 		currentList.erase(std::remove_if(currentList.begin(), currentList.end(), [](std::reference_wrapper<Point>& el) {
 			return el.get().getState() == Point::State::VISITED;
 			}), currentList.end());
@@ -31,7 +35,7 @@ bool WaveAlgorithm::buildPath(std::vector<Point>& const pointList)
 	return false;
 }
 
-void WaveAlgorithm::findPath(std::vector<Point>& const pointList)
+void WaveAlgorithm::findPath(std::vector<Point>& pointList)
 {
 	Point* currentPoint = &*std::find_if(pointList.begin(), pointList.end(), [](Point& el) {
 		return el.getType() == Point::Type::FINISH;

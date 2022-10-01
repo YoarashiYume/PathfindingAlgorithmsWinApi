@@ -14,12 +14,12 @@ public:
 	\param pointList point list
 	\return true if it was possible to build a path, otherwise false
 	*/
-	virtual bool buildPath(std::vector<Point>& const pointList) = 0;
+	virtual bool buildPath(std::vector<Point>& pointList) = 0;
 	/**
 	\brief path finding method
 	\param pointList point list
 	*/
-	virtual void findPath(std::vector<Point>& const pointList) = 0;
+	virtual void findPath(std::vector<Point>& pointList) = 0;
 	/**
 	\brief path finding methodcheck if points are non-diagonal neighbors
 	\return true if they are, otherwise false

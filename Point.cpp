@@ -98,7 +98,7 @@ std::vector<std::reference_wrapper<Point>>& Point::getNeighbors()
 
 Point::Point(const int x_,const int y_,const bool isBorder_,const State state_,const Type type_)
 {
-	constexpr PIXEL_HALF_SIZE = 8;
+	constexpr uint32_t PIXEL_HALF_SIZE = 8;
 	m_location = std::make_pair(x_, y_);
 	m_pixelCenter = std::make_pair((2*PIXEL_HALF_SIZE+1) * x_ + PIXEL_HALF_SIZE, (2*PIXEL_HALF_SIZE+1) * y_ + PIXEL_HALF_SIZE);
 	m_State = state_;
@@ -117,7 +117,7 @@ std::pair<bool, bool> Point::checkStateBeam() const
 {
 	return std::make_pair(isFromA,isFromB);
 }
-void Point::setIsFromA(const bool newState_) const
+void Point::setIsFromA(const bool newState_)
 {
 	isFromA = newState_;
 }
@@ -153,7 +153,7 @@ Point* Point::getPrevious() const
 {
 	return previous;
 }
-bool Point::isStartAndFinish() const
+bool Point::isStartAndFinish()
 {
 	return countOfFinish!=0 && countOfStart!=0;
 }

@@ -20,7 +20,7 @@ Point* Astar::minimymF(std::vector<Point*> list)
 	return list.at(minimumIndex);
 }
 
-bool Astar::buildPath(std::vector<Point>& const pointList)
+bool Astar::buildPath(std::vector<Point>& pointList)
 {
 	Point* currentPoint = &*std::find_if(pointList.begin(), pointList.end(), [](Point& el) {
 		return el.getType() == Point::Type::START;
@@ -67,7 +67,7 @@ bool Astar::buildPath(std::vector<Point>& const pointList)
 			el->setState(Point::State::VISITED);
 	return false;
 }
-void Astar::findPath(std::vector<Point>& const pointList)
+void Astar::findPath(std::vector<Point>& pointList)
 {
 	Point* currentPoint = &*std::find_if(pointList.begin(), pointList.end(), [](Point& el) {
 		return el.getType() == Point::Type::FINISH;

@@ -46,13 +46,15 @@ private:
 	std::vector<std::reference_wrapper<Point>> neighbors; ///< Array of neighbors point 
 	std::vector<D2D1::ColorF> m_color = {
 		D2D1::ColorF::DarkGray,
-		D2D1::ColorF(0.666,0,0),
-		D2D1::ColorF(0.0627,0.615,0.768),
-		D2D1::ColorF(0,0.784,1),
-		D2D1::ColorF(0.96,1,0),
+		D2D1::ColorF(0.666f,0.f,0.f),
+		D2D1::ColorF(0.0627f,0.615f,0.768f),
+		D2D1::ColorF(0.f,0.784f,1.f),
+		//D2D1::ColorF(0.596,0.741,0.074),
+		D2D1::ColorF(0.96f,1.f,0.f),
 		D2D1::ColorF::DarkGray,
-		D2D1::ColorF(0.654,0.768,0.98)
-	}///< point color array
+		D2D1::ColorF(0.654f,0.768f,0.98f)
+		//D2D1::ColorF(0.41,0,1)
+	};///< point color array
 
 	/*for beam Algorithm*/
 	bool isFromA = false;///< point met while constructing path A
@@ -192,6 +194,6 @@ public:
 	\brief checks for the presence of a start and end point
 	\return true if both points are set,otherwise false
 	*/
-	static bool isStartAndFinish() const;
+	static bool isStartAndFinish();
 };
 #endif // !POINT_H_

@@ -36,7 +36,7 @@ int App::run()
 	return static_cast<int> (msg.wParam);
 }
 
-std::string App::readSize()
+std::string App::readSize() const
 {
 	std::wstring text{};
 	text.resize(MAX_PATH);
@@ -210,7 +210,7 @@ void App::create_native_controls()
 	float xTEMP = 0;
 	float yTEMP = 0;
 	pD2D1Factory->GetDesktopDpi(&xTEMP, &yTEMP);
-	disp = new Graphics(&m_hWnd, pD2D1Factory, pRT, xTEMP, yTEMP);
+	disp = new Graphics(&m_hWnd, pD2D1Factory, pRT, static_cast<std::int32_t>(xTEMP), static_cast<std::int32_t>(yTEMP));
 }
 
 
@@ -262,16 +262,18 @@ LRESULT App::window_proc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		switch (static_cast<App::CTL_ID>(LOWORD(wParam)))
 		{
 		case App::CTL_ID::SETSIZEBUTTON_ID:
-			text = readSize();
+		{
+			std::string text = readSize();
 			if (text == "")
 				break;
 			if (std::find_if(text.begin(),text.end(), [](unsigned char c) {	return std::isdigit(c); }) == text.end())
 				break;
-			if (!f)
+			if (f)
 				delete f;
 			f = new Field(std::stoi(text) <= 44 ? std::stoi(text) : 44);
 			disp->printFullField(*f);				
 			break;
+		}
 		case App::CTL_ID::WAVEBUTTON_ID:
 			if (al)
 				delete al;

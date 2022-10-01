@@ -28,7 +28,7 @@ private:
 	\brief Method convert dpi to pixels
 	\return return X dpi
 	*/
-	float dpiToPixelX(constfloat x_)const;
+	float dpiToPixelX(const float x_)const;
 	/**
 	\brief Method convert dpi to pixels
 	\return return Y dpi

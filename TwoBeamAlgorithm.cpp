@@ -1,21 +1,26 @@
 #include "TwoBeamAlgorithm.h"
 
-bool TwoBeamAlgorithm::buildPath(std::vector<Point>& const pointList)
+bool TwoBeamAlgorithm::buildPath(std::vector<Point>& pointList)
 {
+	//search for start element
 	Point* startPoint = &*std::find_if(pointList.begin(), pointList.end(), [](Point& el) {
 		return el.getType() == Point::Type::START;
 		});
+	//search for finish element
 	Point* finishPoint = &*std::find_if(pointList.begin(), pointList.end(), [](Point& el) {
 		return el.getType() == Point::Type::FINISH;
 		});
+	//calculate alpha and beta
 	alpha = startPoint->getLocation().first - finishPoint->getLocation().first >= 0;
 	beta = startPoint->getLocation().second - finishPoint->getLocation().second < 0;
+	//calculate directions
 	std::pair<Direction, Direction> waysForA = std::make_pair(
 		alpha ? TwoBeamAlgorithm::Direction::LEFT : TwoBeamAlgorithm::Direction::RIGHT,
 		beta ? TwoBeamAlgorithm::Direction::DOWN : TwoBeamAlgorithm::Direction::UP);
 	std::pair<Direction, Direction> waysForB = std::make_pair(
 		alpha ? TwoBeamAlgorithm::Direction::RIGHT : TwoBeamAlgorithm::Direction::LEFT,
 		beta ? TwoBeamAlgorithm::Direction::UP : TwoBeamAlgorithm::Direction::DOWN);
+	//build paths
 	buildWay(startPoint, waysForA.first, waysForA.second);
 	buildWay(startPoint, waysForA.second, waysForA.first);
 	buildWay(finishPoint, waysForB.first, waysForB.second);
@@ -23,20 +28,24 @@ bool TwoBeamAlgorithm::buildPath(std::vector<Point>& const pointList)
 	return isPath;
 }
 
-void TwoBeamAlgorithm::findPath(std::vector<Point>& const pointList)
+void TwoBeamAlgorithm::findPath(std::vector<Point>& pointList)
 {
+	//search for start element
 	Point* startPoint = &*std::find_if(pointList.begin(), pointList.end(), [](Point& el) {
 		return el.getType() == Point::Type::START;
 		});
+	//search for finish element
 	Point* finishPoint = &*std::find_if(pointList.begin(), pointList.end(), [](Point& el) {
 		return el.getType() == Point::Type::FINISH;
 		});
+	//calculate directions
 	std::pair<Direction, Direction> waysForA = std::make_pair(
 		alpha ? TwoBeamAlgorithm::Direction::LEFT : TwoBeamAlgorithm::Direction::RIGHT,
 		beta ? TwoBeamAlgorithm::Direction::DOWN : TwoBeamAlgorithm::Direction::UP);
 	std::pair<Direction, Direction> waysForB = std::make_pair(
 		alpha ? TwoBeamAlgorithm::Direction::RIGHT : TwoBeamAlgorithm::Direction::LEFT,
 		beta ? TwoBeamAlgorithm::Direction::UP : TwoBeamAlgorithm::Direction::DOWN);
+	//find path and build it
 	if (isItCorrectDirect(startPoint, waysForA.first, waysForA.second))
 		buildPath(startPoint, waysForA.first, waysForA.second);
 	if (isItCorrectDirect(startPoint, waysForA.second, waysForA.first))
@@ -47,22 +56,20 @@ void TwoBeamAlgorithm::findPath(std::vector<Point>& const pointList)
 		buildPath(finishPoint, waysForB.second, waysForB.first);
 }
 
-void TwoBeamAlgorithm::buildWay(Point* startPoint_, Direction mainDir_, Direction subDir_)
+void TwoBeamAlgorithm::buildWay(Point*const startPoint_,const Direction mainDir_,const Direction subDir_)
 {
+	//method passes the flight along the given directions, marking the points as part of path
 	Point* startPoint = startPoint_;
-	std::function<void(bool)> set;
 	Point::Type endType = startPoint->getType() == Point::Type::START ? Point::Type::FINISH : Point::Type::START;
 	while (!isPath)
 	{
-		set = std::bind(endType == Point::Type::FINISH ? &Point::setIsFromA : &Point::setIsFromB, startPoint,std::placeholders::_1);
+		if (endType == Point::Type::FINISH)
+			startPoint->setIsFromA(true);
+		else
+			startPoint->setIsFromB(true);
 		startPoint->setState(Point::State::VISITED);
-		set(true);
 		if (startPoint->getType() == endType)
 		{
-			if (endType != Point::Type::START)
-				resultDir.first = static_cast<int> (mainDir_);
-			else
-				resultDir.second = static_cast<int> (mainDir_);
 			isPath = true;
 			return;
 		}
@@ -70,34 +77,33 @@ void TwoBeamAlgorithm::buildWay(Point* startPoint_, Direction mainDir_, Directio
 		{
 			if (startPoint->checkStateBeam().second == true)
 			{
-				resultDir.first = static_cast<int> (mainDir_);
 				isPath = true;
 				return;
 			}
 		}
 		else if (startPoint->checkStateBeam().first == true)
 		{
-			resultDir.second = static_cast<int> (mainDir_);
 			isPath = true;
 			return;
 		}
 		
-		if (!interestedNeighbour(*startPoint, mainDir_, endType))
+		if (!interestedNeighbour(*startPoint, mainDir_))
 		{
 			if (startPoint->isBorder())
 				return;
-			if (!interestedNeighbour(*startPoint, subDir_, endType))
+			if (!interestedNeighbour(*startPoint, subDir_))
 				return;
 			else
-				startPoint = interestedNeighbour(*startPoint, subDir_, endType);
+				startPoint = interestedNeighbour(*startPoint, subDir_);
 		}
 		else
-			startPoint = interestedNeighbour(*startPoint, mainDir_, endType);
+			startPoint = interestedNeighbour(*startPoint, mainDir_);
 	}
 }
 
-bool TwoBeamAlgorithm::isItCorrectDirect(Point* startPoint_, Direction mainDir_, Direction subDir_)
+bool TwoBeamAlgorithm::isItCorrectDirect(Point*const startPoint_,const Direction mainDir_,const Direction subDir_)
 {
+	//checks if there are points on the given path that belong to both paths
 	std::pair<bool, bool> res = std::make_pair(true, true);
 	Point* cPoint = startPoint_;
 	Point::Type endType = cPoint->getType() == Point::Type::START ? Point::Type::FINISH : Point::Type::START;
@@ -105,16 +111,15 @@ bool TwoBeamAlgorithm::isItCorrectDirect(Point* startPoint_, Direction mainDir_,
 	{
 		if (cPoint->checkStateBeam() == res)
 			return true;
-		if (!interestedNeighbour(*cPoint, mainDir_, endType))
+		if (!interestedNeighbour(*cPoint, mainDir_))
 		{
-			if (!interestedNeighbour(*cPoint, subDir_, endType))
+			if (!interestedNeighbour(*cPoint, subDir_))
 				return false;
 			else
-				cPoint = interestedNeighbour(*cPoint, subDir_, endType);
+				cPoint = interestedNeighbour(*cPoint, subDir_);
 		}
 		else
-			cPoint = interestedNeighbour(*cPoint, mainDir_, endType);
-
+			cPoint = interestedNeighbour(*cPoint, mainDir_);
 
 		if (endType != Point::Type::START)
 		{
@@ -123,12 +128,11 @@ bool TwoBeamAlgorithm::isItCorrectDirect(Point* startPoint_, Direction mainDir_,
 		}
 		else if (cPoint->checkStateBeam().second != true)
 			return false;
-
 	}
 	return false;
 }
 
-void TwoBeamAlgorithm::buildPath(Point* startPoint_, Direction mainDir_, Direction subDir_)
+void TwoBeamAlgorithm::buildPath(Point*const startPoint_,const Direction mainDir_,const Direction subDir_)
 {
 	std::pair<bool, bool> res = std::make_pair(true, true);
 	Point* cPoint = startPoint_;
@@ -138,17 +142,16 @@ void TwoBeamAlgorithm::buildPath(Point* startPoint_, Direction mainDir_, Directi
 		cPoint->setState(Point::State::PATH);
 		if (cPoint->checkStateBeam() == res)
 			return;
-		if (!interestedNeighbour(*cPoint, mainDir_, endType))
+		if (!interestedNeighbour(*cPoint, mainDir_))
 		{
-			if (!interestedNeighbour(*cPoint, subDir_, endType))
+			if (!interestedNeighbour(*cPoint, subDir_))
 				return;
 			else
-				cPoint = interestedNeighbour(*cPoint, subDir_, endType);
+				cPoint = interestedNeighbour(*cPoint, subDir_);
 		}
 		else
-			cPoint = interestedNeighbour(*cPoint, mainDir_, endType);
-
-
+			cPoint = interestedNeighbour(*cPoint, mainDir_);
+		
 		if (endType != Point::Type::START)
 		{
 			if (cPoint->checkStateBeam().first != true)
@@ -156,12 +159,12 @@ void TwoBeamAlgorithm::buildPath(Point* startPoint_, Direction mainDir_, Directi
 		}
 		else if (cPoint->checkStateBeam().second != true)
 			return;
-
 	}
 }
 
-Point* TwoBeamAlgorithm::interestedNeighbour(Point& currentPoint_, Direction dir_, Point::Type endType)
+Point* TwoBeamAlgorithm::interestedNeighbour(Point& currentPoint_,const Direction dir_)
 {
+	//finds a neighboring point in a given direction
 	int dir = dir_ == TwoBeamAlgorithm::Direction::UP || dir_ == TwoBeamAlgorithm::Direction::RIGHT ? 1 : -1;
 	int dY = dir_ == TwoBeamAlgorithm::Direction::RIGHT || dir_ == TwoBeamAlgorithm::Direction::LEFT ? 0 : -dir;
 	int dX = dir_ == TwoBeamAlgorithm::Direction::UP || dir_ == TwoBeamAlgorithm::Direction::DOWN ? 0 : dir;
